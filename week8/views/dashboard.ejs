@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Movie Dashboard</title>
+</head>
+
+<body>
+
+    <h1>Welcome to Movie Dashboard, <%= user %>!</h1>
+
+    <p>
+        <strong>Session Info:</strong>
+        You are logged in using Express Session.
+    </p>
+
+
+    <p>
+        <strong>Last Booking:</strong>
+        <%= lastBooking %>
+    </p>
+
+
+    <p>
+        <strong>Cookie Data:</strong>
+        Custom lastBooking cookie is being read.
+    </p>
+
+
+    <hr>
+
+
+    <h3>Movie Services</h3>
+
+    <ul>
+        <li>View Movies</li>
+        <li>Book Tickets</li>
+        <li>View Bookings</li>
+        <li>Cancel Tickets</li>
+    </ul>
+
+
+    <br>
+
+    <a href="/logout">Logout</a>
+
+</body>
+
+</html>
