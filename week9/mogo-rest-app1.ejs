@@ -1,0 +1,52 @@
+const express = require('express');
+const mongoose = require('mongoose');
+const app = express();
+
+// --- CONFIGURATION ---
+app.set('view engine', 'ejs'); // Tells Express to use EJS for rendering templates
+app.use(express.json()); // To handle JSON data from AJAX requests
+app.use(express.urlencoded({ extended: true })); // To handle standard HTML form submissions
+
+// Connect to MongoDB and define Student model (adjust URI/schema as needed from previous steps)
+mongoose.connect('mongodb://localhost:27017/studentDB');
+const studentSchema = new mongoose.Schema({
+    name: String,
+    rollNumber: Number,
+    course: String
+});
+const Student = mongoose.model('Student', studentSchema);
+
+// 1. HOME ROUTE: Fetches students and renders the EJS page
+app.get('/', async (req, res) => {
+    try {
+        const students = await Student.find(); 
+        res.render('apphome', { students });
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
+
+// 2. CREATE ROUTE (POST API)
+app.post('/students', async (req, res) => {
+    try {
+        const newStudent = new Student(req.body);
+        await newStudent.save();
+        res.status(201).json(newStudent);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// 3. DELETE ROUTE (DELETE API)
+app.delete('/students/:id', async (req, res) => {
+    try {
+        await Student.findByIdAndDelete(req.params.id);
+        res.status(200).json({ message: 'Deleted successfully' });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.listen(3000, () => {
+    console.log('Server running on http://localhost:3000');
+});
